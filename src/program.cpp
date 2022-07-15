@@ -2,6 +2,7 @@
 #include<string.h>
 #include<iostream>
 #include<fstream>
+#include<vector>
 
 using namespace std;
 
@@ -11,29 +12,37 @@ class StringCalculator{
     int Add(string numbers)
     {
         if(numbers == "") return 0;
-        int Number1=0,Number2=0;
+        vector<int> Numbers;
         string CurrentNumberStr = "";
         try{
             for(int i=0;i<numbers.size();++i){
                 if(isDelimiter(numbers[i])){
-                    Number1 = stoi(CurrentNumberStr);
+                    int currentNumberInt = stoi(CurrentNumberStr);
+                    Numbers.push_back(currentNumberInt);
                     CurrentNumberStr = "";
                     continue;
                 }
-                if(numbers[i] >= '0' && numbers[i] <= '9') CurrentNumberStr += numbers[i];
+                if(numbers[i] >= '0' && numbers[i] <= '9') 
+                    CurrentNumberStr += numbers[i];
                 else{
                     cout<<"numbers[i]="<<numbers[i]<<"i="<<i<<"\n";
                     string error = "Invalid Input!";
                     throw error;
                 }
             }
-            if(CurrentNumberStr != "") Number2 = stoi(CurrentNumberStr);
+            if(CurrentNumberStr != ""){
+                int currentNumberInt = stoi(CurrentNumberStr);
+                Numbers.push_back(currentNumberInt);
+                CurrentNumberStr = "";
+            }
         }
         catch(string err){
             cout<<err<<"\n";
             exit(1);
         }
-        int Answer = Number1 + Number2;
+        int Answer = 0;
+        for(int i=0;i<Numbers.size();++i)
+            Answer += Numbers[i];
         return Answer;
     }
 
