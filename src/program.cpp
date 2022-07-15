@@ -6,6 +6,8 @@
 
 using namespace std;
 
+vector<char> delimiters;
+
 class StringCalculator{
     public:
 
@@ -17,6 +19,10 @@ class StringCalculator{
         try{
             for(int i=0;i<numbers.size();++i){
                 if(isDelimiter(numbers[i])){
+                    if(CurrentNumberStr == ""){
+                        string error = "Invalid Input!";
+                        throw error;
+                    }
                     int currentNumberInt = stoi(CurrentNumberStr);
                     Numbers.push_back(currentNumberInt);
                     CurrentNumberStr = "";
@@ -51,13 +57,18 @@ class StringCalculator{
     //Checks if current character is a delimiter or not.
     bool isDelimiter(char c)
     {
-        if(c == ',') return true;
+        for(int i=0;i<delimiters.size();++i) 
+            if(c == delimiters[i]) 
+                return true;
         return false;
     }
 };
 
 int main()
 {
+    delimiters.push_back(',');
+    delimiters.push_back('\n');
+
     fstream file;
     string word,inputStr="";
     
