@@ -17,7 +17,8 @@ class StringCalculator{
         vector<int> Numbers;
         string CurrentNumberStr = "";
         try{
-            for(int i=0;i<numbers.size();++i){
+            int startIndex = checkDelimiter(numbers);
+            for(int i=startIndex;i<numbers.size();++i){
                 if(isDelimiter(numbers[i])){
                     if(CurrentNumberStr == ""){
                         string error = "Invalid Input!";
@@ -54,13 +55,23 @@ class StringCalculator{
 
     private:
 
-    //Checks if current character is a delimiter or not.
+    //checks if current character is a delimiter or not.
     bool isDelimiter(char c)
     {
         for(int i=0;i<delimiters.size();++i) 
             if(c == delimiters[i]) 
                 return true;
         return false;
+    }
+
+    //returns the index after removing delimiter if present.
+    int checkDelimiter(string numbers)
+    {
+        if(numbers.size()>=3 && numbers[0] == '/' && numbers[1] == '/'){
+            delimiters.push_back(numbers[2]);
+            return 4;
+        }
+        return 0;
     }
 };
 
