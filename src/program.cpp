@@ -17,6 +17,7 @@ class StringCalculator{
         vector<int> Numbers;
         string CurrentNumberStr = "";
         try{
+            identifyNegativeNumbers(numbers);
             int startIndex = checkDelimiter(numbers);
             for(int i=startIndex;i<numbers.size();++i){
                 if(isDelimiter(numbers[i])){
@@ -32,7 +33,6 @@ class StringCalculator{
                 if(numbers[i] >= '0' && numbers[i] <= '9') 
                     CurrentNumberStr += numbers[i];
                 else{
-                    cout<<"numbers[i]="<<numbers[i]<<"i="<<i<<"\n";
                     string error = "Invalid Input!";
                     throw error;
                 }
@@ -54,6 +54,55 @@ class StringCalculator{
     }
 
     private:
+
+    vector<int> identifyNegativeNumbers(string numbers)
+    {
+        string currentNumberStr = "";
+        vector<int> negativeNumbers;
+        bool isNegative = false;
+        int startIndex = checkDelimiter(numbers);
+        for(int i=startIndex;i<numbers.size();++i){
+            if(isDelimiter(numbers[i])){
+                if(currentNumberStr == ""){
+                    string error = "Invalid Input!";
+                    throw error;
+                }
+                int currentNumberInt = stoi(currentNumberStr);
+                if(isNegative) negativeNumbers.push_back(-currentNumberInt);
+                currentNumberStr = "";
+                isNegative = false;
+                continue;
+            }
+            if(numbers[i] == '-'){
+                if(i == startIndex) 
+                    isNegative = true;
+                if((i-1)>=0 && isDelimiter(numbers[i-1])) 
+                    isNegative = true;
+                else{
+                    string error = "Invalid Input!";
+                    throw error;
+                }
+                continue;
+            }
+            currentNumberStr += numbers[i];
+        }
+        if(currentNumberStr != ""){
+            int currentNumberInt = stoi(currentNumberStr);
+            if(isNegative) 
+                negativeNumbers.push_back(-currentNumberInt);
+        }
+        if(negativeNumbers.size()!=0){
+            string error = "Error! Negative Numbers Not Allowed!\n";
+            error += "These negative numbers were detected: \n";
+            error += to_string(negativeNumbers[0]);
+            for(int i=1;i<negativeNumbers.size();++i){
+                error += ", ";
+                error += to_string(negativeNumbers[i]);
+            }
+            throw error;
+        }
+        return negativeNumbers;
+    }
 
     //checks if current character is a delimiter or not.
     bool isDelimiter(char c)
